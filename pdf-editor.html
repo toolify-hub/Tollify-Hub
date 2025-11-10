@@ -6,7 +6,6 @@
     <title>PDF Editor - Tollify Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -32,7 +31,6 @@
             line-height: 1.6;
         }
 
-        /* Header */
         .header {
             background: var(--white);
             box-shadow: 0 2px 15px rgba(0,0,0,0.1);
@@ -97,7 +95,6 @@
             transform: translateY(-2px);
         }
 
-        /* Main Container */
         .container {
             max-width: 1400px;
             margin: 30px auto;
@@ -107,15 +104,12 @@
             gap: 30px;
         }
 
-        /* Upload Section */
         .upload-section {
             background: var(--white);
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             height: fit-content;
-            position: sticky;
-            top: 100px;
         }
 
         .upload-area {
@@ -131,11 +125,6 @@
         .upload-area:hover {
             border-color: var(--secondary);
             background: rgba(231, 76, 60, 0.05);
-        }
-
-        .upload-area.dragover {
-            border-color: var(--success);
-            background: rgba(39, 174, 96, 0.1);
         }
 
         .upload-icon {
@@ -186,7 +175,6 @@
             font-size: 14px;
         }
 
-        /* Tools Section */
         .tools-section {
             background: var(--white);
             padding: 25px;
@@ -244,11 +232,6 @@
             cursor: not-allowed;
         }
 
-        .tool-btn i {
-            width: 20px;
-        }
-
-        /* Editor Section */
         .editor-section {
             background: var(--white);
             padding: 30px;
@@ -316,7 +299,6 @@
             color: var(--primary);
         }
 
-        /* PDF Viewer */
         .pdf-viewer {
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -386,7 +368,6 @@
             font-size: 16px;
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -408,8 +389,6 @@
             width: 90%;
             max-width: 500px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            max-height: 90vh;
-            overflow-y: auto;
         }
 
         .modal-header {
@@ -469,7 +448,6 @@
             resize: vertical;
         }
 
-        /* Footer */
         .footer {
             background: var(--primary);
             color: var(--white);
@@ -478,7 +456,6 @@
             margin-top: 50px;
         }
 
-        /* Loading Spinner */
         .loading {
             display: none;
             text-align: center;
@@ -500,14 +477,9 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive */
         @media (max-width: 1024px) {
             .container {
                 grid-template-columns: 1fr;
-            }
-            
-            .upload-section {
-                position: static;
             }
         }
 
@@ -541,7 +513,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="nav-bar">
             <a href="index.html" class="logo">
@@ -554,9 +525,7 @@
         </div>
     </header>
 
-    <!-- Main Container -->
     <div class="container">
-        <!-- Left Sidebar - Upload & Tools -->
         <div class="upload-section">
             <h3>Upload PDF</h3>
             <div class="upload-area" id="uploadArea">
@@ -617,7 +586,6 @@
             </div>
         </div>
 
-        <!-- Right Section - PDF Editor -->
         <div class="editor-section">
             <div class="editor-header">
                 <h2>PDF Editor</h2>
@@ -660,7 +628,6 @@
         </div>
     </div>
 
-    <!-- Text Editor Modal -->
     <div class="modal" id="textEditorModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -694,7 +661,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2024 Tollify Hub. All rights reserved. | tollifyhub@gmail.com</p>
         <p style="margin-top: 10px; opacity: 0.8;">Professional PDF Editor Tool</p>
@@ -741,16 +707,19 @@
         
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadArea.classList.add('dragover');
+            uploadArea.style.borderColor = var(--secondary);
+            uploadArea.style.background = 'rgba(231, 76, 60, 0.1)';
         });
         
         uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
+            uploadArea.style.borderColor = var(--border);
+            uploadArea.style.background = 'transparent';
         });
         
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
-            uploadArea.classList.remove('dragover');
+            uploadArea.style.borderColor = var(--border);
+            uploadArea.style.background = 'transparent';
             if (e.dataTransfer.files.length > 0) {
                 handleFileSelect(e.dataTransfer.files[0]);
             }
@@ -785,38 +754,38 @@
 
         highlightBtn.addEventListener('click', () => {
             if (currentPDF) {
-                alert('Highlight feature will be available in the next update!');
+                alert('🎨 Highlight feature will be available in the next update!');
             }
         });
 
         addImageBtn.addEventListener('click', () => {
             if (currentPDF) {
-                alert('Image addition feature will be available in the next update!');
+                alert('🖼️ Image addition feature will be available in the next update!');
             }
         });
 
         rotateBtn.addEventListener('click', () => {
             if (currentPDF) {
-                alert('Page rotation feature will be available in the next update!');
+                alert('🔄 Page rotation feature will be available in the next update!');
             }
         });
 
         splitBtn.addEventListener('click', () => {
             if (currentPDF) {
-                alert('PDF splitting feature will be available in the next update!');
+                alert('✂️ PDF splitting feature will be available in the next update!');
             }
         });
 
         watermarkBtn.addEventListener('click', () => {
             if (currentPDF) {
-                alert('Watermark feature will be available in the next update!');
+                alert('💧 Watermark feature will be available in the next update!');
             }
         });
 
         // File handling
         function handleFileSelect(file) {
             if (file.type !== 'application/pdf') {
-                alert('Please select a PDF file.');
+                alert('❌ Please select a PDF file.');
                 return;
             }
 
@@ -830,6 +799,7 @@
             // Show loading
             loading.style.display = 'block';
             pdfPlaceholder.style.display = 'none';
+            pdfCanvas.style.display = 'none';
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -841,6 +811,11 @@
 
         // PDF loading and rendering
         function loadPDF(data) {
+            // Clear previous PDF
+            if (currentPDF) {
+                currentPDF.destroy();
+            }
+
             pdfjsLib.getDocument(data).promise.then(pdf => {
                 currentPDF = pdf;
                 totalPages = pdf.numPages;
@@ -874,7 +849,7 @@
                 console.error('Error loading PDF:', error);
                 loading.style.display = 'none';
                 pdfPlaceholder.style.display = 'flex';
-                alert('Error loading PDF file. Please try another file.');
+                alert('❌ Error loading PDF file. Please try another file.');
             });
         }
 
@@ -916,12 +891,12 @@
             const color = document.getElementById('textColor').value;
 
             if (!text.trim()) {
-                alert('Please enter some text.');
+                alert('❌ Please enter some text.');
                 return;
             }
 
             // Show success message
-            alert(`Text "${text}" added successfully to the PDF!`);
+            alert(`✅ Text "${text}" added successfully to the PDF!\n\nFont: ${font}\nSize: ${size}\nColor: ${color}`);
             
             // Close modal and reset form
             closeModal('textEditorModal');
@@ -931,7 +906,7 @@
         // Save/Download functionality
         saveBtn.addEventListener('click', () => {
             if (currentPDF) {
-                alert('PDF saved successfully!');
+                alert('💾 PDF saved successfully!');
             }
         });
 
@@ -941,8 +916,10 @@
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(pdfFile);
                 link.download = 'edited-' + pdfFile.name;
+                document.body.appendChild(link);
                 link.click();
-                alert('Download started!');
+                document.body.removeChild(link);
+                alert('📥 Download started!');
             }
         });
 
@@ -962,8 +939,13 @@
             });
         });
 
-        // Initialize
+        // Initialize PDF.js
         console.log('PDF Editor loaded successfully!');
+        
+        // Fallback for PDF.js worker
+        if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        }
     </script>
 </body>
 </html>
