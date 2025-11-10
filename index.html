@@ -15,7 +15,7 @@
 
         :root {
             --primary: #2c3e50;
-            --secondary: #27ae60;  /* Changed to green for eco-friendly theme */
+            --secondary: #27ae60;
             --background: #f8f9fa;
             --text: #2c3e50;
             --text-light: #7f8c8d;
@@ -38,6 +38,9 @@
             background: var(--white);
             box-shadow: 0 2px 15px rgba(0,0,0,0.1);
             padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .nav-bar {
@@ -53,6 +56,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
         }
 
         .logo-icon {
@@ -89,10 +93,14 @@
             color: var(--text);
             font-weight: 500;
             transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: var(--secondary);
+            background: rgba(39, 174, 96, 0.1);
         }
 
         /* Hero Section */
@@ -381,6 +389,25 @@
             display: none;
         }
 
+        /* Other Sections */
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-section {
+            background: var(--white);
+        }
+
+        .pricing-section {
+            background: var(--background);
+        }
+
+        .contact-section {
+            background: var(--white);
+        }
+
         /* Footer */
         .footer {
             background: var(--primary);
@@ -461,7 +488,9 @@
             }
             
             .nav-links {
-                gap: 20px;
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
             }
             
             .hero h1 {
@@ -475,6 +504,15 @@
             .demo-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .categories {
+                gap: 10px;
+            }
+            
+            .category-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -482,7 +520,7 @@
     <!-- Header -->
     <header class="header">
         <div class="nav-bar">
-            <div class="logo">
+            <div class="logo" onclick="scrollToSection('hero')">
                 <div class="logo-icon">T</div>
                 <div>
                     <div class="logo-text">Tollify Hub</div>
@@ -490,17 +528,17 @@
                 </div>
             </div>
             <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">All Tools</a>
-                <a href="#">Features</a>
-                <a href="#">Pricing</a>
-                <a href="#">Contact</a>
+                <a class="nav-link active" onclick="scrollToSection('hero')">Home</a>
+                <a class="nav-link" onclick="scrollToSection('tools')">All Tools</a>
+                <a class="nav-link" onclick="scrollToSection('features')">Features</a>
+                <a class="nav-link" onclick="scrollToSection('pricing')">Pricing</a>
+                <a class="nav-link" onclick="scrollToSection('contact')">Contact</a>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="hero-content">
             <h1>Powerful Tools for Professionals</h1>
             <p>Streamline your workflow with our collection of professional-grade online tools. Free, fast, and reliable.</p>
@@ -512,24 +550,24 @@
     </section>
 
     <!-- Tools Section -->
-    <section class="tools-section">
+    <section class="tools-section" id="tools">
         <div class="section-header">
             <h2>Our Professional Tools</h2>
             <p>Handpicked tools designed to boost your productivity and simplify complex tasks</p>
         </div>
 
         <div class="categories">
-            <button class="category-btn active">All Tools</button>
-            <button class="category-btn">Documents</button>
-            <button class="category-btn">Images</button>
-            <button class="category-btn">Development</button>
-            <button class="category-btn">Business</button>
-            <button class="category-btn">Sustainability</button>
+            <button class="category-btn active" data-category="all">All Tools</button>
+            <button class="category-btn" data-category="documents">Documents</button>
+            <button class="category-btn" data-category="images">Images</button>
+            <button class="category-btn" data-category="development">Development</button>
+            <button class="category-btn" data-category="business">Business</button>
+            <button class="category-btn" data-category="sustainability">Sustainability</button>
         </div>
 
         <div class="tools-grid">
             <!-- Carbon Footprint Tool - Featured -->
-            <div class="tool-card featured">
+            <div class="tool-card featured" data-category="sustainability">
                 <div class="featured-badge">NEW</div>
                 <div class="tool-icon eco-icon">
                     <i class="fas fa-leaf"></i>
@@ -540,7 +578,7 @@
             </div>
 
             <!-- Tool 1 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="documents">
                 <div class="tool-icon">
                     <i class="fas fa-file-pdf"></i>
                 </div>
@@ -550,7 +588,7 @@
             </div>
 
             <!-- Tool 2 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="images">
                 <div class="tool-icon">
                     <i class="fas fa-image"></i>
                 </div>
@@ -560,7 +598,7 @@
             </div>
 
             <!-- Tool 3 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="development">
                 <div class="tool-icon">
                     <i class="fas fa-code"></i>
                 </div>
@@ -570,7 +608,7 @@
             </div>
 
             <!-- Tool 4 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="business">
                 <div class="tool-icon">
                     <i class="fas fa-calculator"></i>
                 </div>
@@ -580,7 +618,7 @@
             </div>
 
             <!-- Tool 5 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="development">
                 <div class="tool-icon">
                     <i class="fas fa-palette"></i>
                 </div>
@@ -590,7 +628,7 @@
             </div>
 
             <!-- Tool 6 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="business">
                 <div class="tool-icon">
                     <i class="fas fa-chart-bar"></i>
                 </div>
@@ -600,7 +638,7 @@
             </div>
 
             <!-- Tool 7 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="images">
                 <div class="tool-icon">
                     <i class="fas fa-video"></i>
                 </div>
@@ -610,7 +648,7 @@
             </div>
 
             <!-- Tool 8 -->
-            <div class="tool-card">
+            <div class="tool-card" data-category="development">
                 <div class="tool-icon">
                     <i class="fas fa-lock"></i>
                 </div>
@@ -671,6 +709,42 @@
         </div>
     </section>
 
+    <!-- Features Section -->
+    <section class="section features-section" id="features">
+        <div class="section-header">
+            <h2>Features</h2>
+            <p>Discover what makes Tollify Hub the best choice for your tool needs</p>
+        </div>
+        <div style="text-align: center; color: var(--text-light); max-width: 800px; margin: 0 auto;">
+            <p>Our platform offers cutting-edge features designed to enhance your productivity and workflow efficiency.</p>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section pricing-section" id="pricing">
+        <div class="section-header">
+            <h2>Pricing</h2>
+            <p>Flexible plans that grow with your needs</p>
+        </div>
+        <div style="text-align: center; color: var(--text-light); max-width: 800px; margin: 0 auto;">
+            <p>Choose from our range of pricing options designed for individuals, teams, and enterprises.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="section-header">
+            <h2>Contact Us</h2>
+            <p>Get in touch with our team</p>
+        </div>
+        <div style="text-align: center; color: var(--text-light); max-width: 800px; margin: 0 auto;">
+            <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            <div style="margin-top: 20px;">
+                <p><strong>Email:</strong> tollifyhub@gmail.com</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
@@ -686,22 +760,22 @@
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">All Tools</a></li>
-                    <li><a href="#">Features</a></li>
-                    <li><a href="#">Pricing</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a onclick="scrollToSection('hero')">Home</a></li>
+                    <li><a onclick="scrollToSection('tools')">All Tools</a></li>
+                    <li><a onclick="scrollToSection('features')">Features</a></li>
+                    <li><a onclick="scrollToSection('pricing')">Pricing</a></li>
+                    <li><a onclick="scrollToSection('contact')">Contact</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
                 <h3>Tools</h3>
                 <ul class="footer-links">
-                    <li><a href="#">PDF Tools</a></li>
-                    <li><a href="#">Image Tools</a></li>
-                    <li><a href="#">Code Tools</a></li>
-                    <li><a href="#">Business Tools</a></li>
-                    <li><a href="#">Sustainability Tools</a></li>
+                    <li><a onclick="filterTools('documents')">PDF Tools</a></li>
+                    <li><a onclick="filterTools('images')">Image Tools</a></li>
+                    <li><a onclick="filterTools('development')">Code Tools</a></li>
+                    <li><a onclick="filterTools('business')">Business Tools</a></li>
+                    <li><a onclick="filterTools('sustainability')">Sustainability Tools</a></li>
                 </ul>
             </div>
 
@@ -723,6 +797,61 @@
     </footer>
 
     <script>
+        // Navigation functionality
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                
+                // Scroll to section
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Category filtering functionality
+        function filterTools(category) {
+            // If called from footer links, update category buttons
+            if (typeof category === 'string') {
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.category === category) {
+                        btn.classList.add('active');
+                    }
+                });
+                scrollToSection('tools');
+            } else {
+                // Called from category buttons
+                category = event.target.dataset.category;
+            }
+            
+            const tools = document.querySelectorAll('.tool-card');
+            tools.forEach(tool => {
+                if (category === 'all' || tool.dataset.category === category) {
+                    tool.style.display = 'block';
+                } else {
+                    tool.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize category buttons
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active button
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Filter tools
+                filterTools();
+            });
+        });
+
         // Carbon Calculator Functions
         function calculateWebsiteCarbon() {
             const url = document.getElementById('websiteUrl').value;
@@ -798,22 +927,40 @@
             });
         });
 
-        // Category filtering
-        document.querySelectorAll('.category-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.category-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                this.classList.add('active');
-            });
-        });
-
         // Search functionality
         document.querySelector('.search-box button').addEventListener('click', function() {
             const searchTerm = document.querySelector('.search-box input').value;
             if (searchTerm.trim() !== '') {
                 alert(`Searching for: "${searchTerm}" - This feature will be implemented soon!`);
             }
+        });
+
+        // Make logo clickable to go home
+        document.querySelector('.logo').addEventListener('click', function() {
+            scrollToSection('hero');
+        });
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.textContent.toLowerCase() === current || 
+                    (link.textContent === 'Home' && current === 'hero')) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>
