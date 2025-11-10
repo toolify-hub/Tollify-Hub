@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tollify Hub - Professional Online Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;  /* Changed to green for eco-friendly theme */
+            --background: #f8f9fa;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --eco-green: #27ae60;
+            --eco-light: #d5f4e6;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 0;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: var(--secondary);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .tagline {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #219653;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: var(--white);
+            color: var(--text);
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .tool-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            text-align: center;
+            position: relative;
+        }
+
+        .tool-card.featured {
+            border: 2px solid var(--eco-green);
+            background: var(--eco-light);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--eco-green);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--secondary);
+            font-size: 24px;
+        }
+
+        .eco-icon {
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--eco-green);
+        }
+
+        .tool-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .tool-card p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .tool-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tool-btn:hover {
+            background: var(--secondary);
+        }
+
+        .eco-btn {
+            background: var(--eco-green);
+        }
+
+        .eco-btn:hover {
+            background: #219653;
+        }
+
+        /* Carbon Calculator Demo */
+        .carbon-demo {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--eco-green);
+        }
+
+        .carbon-demo h3 {
+            color: var(--eco-green);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .demo-section {
+            background: var(--eco-light);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .demo-section h4 {
+            color: var(--eco-green);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .calculate-btn {
+            background: var(--eco-green);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .calculate-btn:hover {
+            background: #219653;
+        }
+
+        .result {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 50px 20px 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .contact-info {
+            color: #bdc3c7;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            text-align: center;
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-bar">
+            <div class="logo">
+                <div class="logo-icon">T</div>
+                <div>
+                    <div class="logo-text">Tollify Hub</div>
+                    <div class="tagline">Professional Online Tools</div>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">All Tools</a>
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Powerful Tools for Professionals</h1>
+            <p>Streamline your workflow with our collection of professional-grade online tools. Free, fast, and reliable.</p>
+            <div class="search-box">
+                <input type="text" placeholder="Search for tools...">
+                <button><i class="fas fa-search"></i> Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools-section">
+        <div class="section-header">
+            <h2>Our Professional Tools</h2>
+            <p>Handpicked tools designed to boost your productivity and simplify complex tasks</p>
+        </div>
+
+        <div class="categories">
+            <button class="category-btn active">All Tools</button>
+            <button class="category-btn">Documents</button>
+            <button class="category-btn">Images</button>
+            <button class="category-btn">Development</button>
+            <button class="category-btn">Business</button>
+            <button class="category-btn">Sustainability</button>
+        </div>
+
+        <div class="tools-grid">
+            <!-- Carbon Footprint Tool - Featured -->
+            <div class="tool-card featured">
+                <div class="featured-badge">NEW</div>
+                <div class="tool-icon eco-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Carbon Footprint Calculator</h3>
+                <p>Calculate environmental impact of websites, files, and digital activities with detailed analytics.</p>
+                <button class="tool-btn eco-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 1 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <h3>PDF Editor</h3>
+                <p>Edit, merge, split and compress PDF files with our advanced editor</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 2 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-image"></i>
+                </div>
+                <h3>Image Compressor</h3>
+                <p>Reduce image file size without losing quality for web and mobile</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 3 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>Code Formatter</h3>
+                <p>Format and beautify your code in multiple programming languages</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 4 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Business Calculator</h3>
+                <p>Calculate ROI, profit margins, and other business metrics</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 5 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3>Color Palette</h3>
+                <p>Generate professional color schemes for your designs and brands</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 6 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>Data Visualizer</h3>
+                <p>Create beautiful charts and graphs from your data in seconds</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 7 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>Video Converter</h3>
+                <p>Convert videos between formats with optimized settings</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+
+            <!-- Tool 8 -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Password Generator</h3>
+                <p>Create strong, secure passwords for all your accounts</p>
+                <button class="tool-btn">Use Tool</button>
+            </div>
+        </div>
+
+        <!-- Carbon Calculator Demo -->
+        <div class="carbon-demo">
+            <h3><i class="fas fa-leaf"></i> Carbon Footprint Calculator</h3>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 20px;">Calculate the environmental impact of your digital activities</p>
+            
+            <div class="demo-grid">
+                <div class="demo-section">
+                    <h4><i class="fas fa-globe"></i> Website Carbon Analysis</h4>
+                    <div class="input-group">
+                        <label for="websiteUrl">Website URL</label>
+                        <input type="text" id="websiteUrl" placeholder="https://example.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="monthlyVisitors">Monthly Visitors</label>
+                        <select id="monthlyVisitors">
+                            <option value="1000">1,000 visitors</option>
+                            <option value="10000">10,000 visitors</option>
+                            <option value="50000">50,000 visitors</option>
+                            <option value="100000">100,000+ visitors</option>
+                        </select>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateWebsiteCarbon()">
+                        <i class="fas fa-calculator"></i> Calculate Website Impact
+                    </button>
+                    <div class="result" id="websiteResult"></div>
+                </div>
+                
+                <div class="demo-section">
+                    <h4><i class="fas fa-file"></i> File Storage Impact</h4>
+                    <div class="input-group">
+                        <label for="fileSize">Total File Size (GB)</label>
+                        <input type="number" id="fileSize" placeholder="e.g., 50" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="storageType">Storage Type</label>
+                        <select id="storageType">
+                            <option value="cloud">Cloud Storage</option>
+                            <option value="local">Local Server</option>
+                            <option value="ssd">SSD Storage</option>
+                            <option value="hdd">HDD Storage</option>
+                        </select>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateFileCarbon()">
+                        <i class="fas fa-calculator"></i> Calculate File Impact
+                    </button>
+                    <div class="result" id="fileResult"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Tollify Hub</h3>
+                <p style="color: #bdc3c7; margin-bottom: 20px;">Professional tools for modern professionals. Streamline your workflow with our powerful online utilities.</p>
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> tollifyhub@gmail.com</p>
+                    <p><i class="fas fa-globe"></i> www.tollifyhub.com</p>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">All Tools</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Tools</h3>
+                <ul class="footer-links">
+                    <li><a href="#">PDF Tools</a></li>
+                    <li><a href="#">Image Tools</a></li>
+                    <li><a href="#">Code Tools</a></li>
+                    <li><a href="#">Business Tools</a></li>
+                    <li><a href="#">Sustainability Tools</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Data Protection</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Tollify Hub. All rights reserved. | Professional Online Tools Platform</p>
+            <p style="margin-top: 10px;"><i class="fas fa-leaf"></i> Committed to Digital Sustainability</p>
+        </div>
+    </footer>
+
+    <script>
+        // Carbon Calculator Functions
+        function calculateWebsiteCarbon() {
+            const url = document.getElementById('websiteUrl').value;
+            const visitors = document.getElementById('monthlyVisitors').value;
+            
+            if (!url) {
+                alert('Please enter a website URL');
+                return;
+            }
+            
+            // Simulate calculation
+            const carbonPerVisit = 0.2 + Math.random() * 0.3; // grams CO2 per visit
+            const monthlyCarbon = (carbonPerVisit * visitors).toFixed(2);
+            const yearlyCarbon = (monthlyCarbon * 12).toFixed(2);
+            const treesNeeded = (yearlyCarbon / 21000).toFixed(2); // approx CO2 absorbed by one tree yearly
+            
+            const result = document.getElementById('websiteResult');
+            result.innerHTML = `
+                <h4>Website Carbon Analysis</h4>
+                <p><strong>${url}</strong></p>
+                <p>Monthly CO2: <strong>${monthlyCarbon}g</strong></p>
+                <p>Yearly CO2: <strong>${yearlyCarbon}g</strong></p>
+                <p>Trees needed to offset: <strong>${treesNeeded}</strong></p>
+                <p><small>Based on ${visitors} monthly visitors</small></p>
+            `;
+            result.style.display = 'block';
+        }
+        
+        function calculateFileCarbon() {
+            const fileSize = document.getElementById('fileSize').value;
+            const storageType = document.getElementById('storageType').value;
+            
+            if (!fileSize || fileSize < 1) {
+                alert('Please enter a valid file size');
+                return;
+            }
+            
+            // Different carbon factors for storage types
+            const factors = {
+                'cloud': 0.15,
+                'local': 0.08,
+                'ssd': 0.02,
+                'hdd': 0.04
+            };
+            
+            const carbonPerGB = factors[storageType];
+            const yearlyCarbon = (carbonPerGB * fileSize * 365).toFixed(2);
+            const equivalentKM = (yearlyCarbon / 120).toFixed(1); // car emissions per km
+            
+            const result = document.getElementById('fileResult');
+            result.innerHTML = `
+                <h4>File Storage Impact</h4>
+                <p>Storage: <strong>${fileSize}GB (${storageType})</strong></p>
+                <p>Yearly CO2: <strong>${yearlyCarbon}g</strong></p>
+                <p>Equivalent to driving: <strong>${equivalentKM}km</strong></p>
+                <p><small>Based on continuous storage</small></p>
+            `;
+            result.style.display = 'block';
+        }
+
+        // Tool button functionality
+        document.querySelectorAll('.tool-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const toolName = this.closest('.tool-card').querySelector('h3').textContent;
+                if (toolName === 'Carbon Footprint Calculator') {
+                    // Scroll to the demo section
+                    document.querySelector('.carbon-demo').scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                } else {
+                    alert(`Opening ${toolName} tool. This feature will be available soon!`);
+                }
+            });
+        });
+
+        // Category filtering
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if (searchTerm.trim() !== '') {
+                alert(`Searching for: "${searchTerm}" - This feature will be implemented soon!`);
+            }
+        });
+    </script>
+</body>
+</html>
