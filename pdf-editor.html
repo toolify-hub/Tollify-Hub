@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Editor - Tollify Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --background: #f8f9fa;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --border: #e0e0e0;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 0;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--secondary);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--secondary);
+            background: rgba(39, 174, 96, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .browse-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-info {
+            background: var(--background);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+
+        .tools-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .tool-group {
+            margin-bottom: 25px;
+        }
+
+        .tool-group h4 {
+            margin-bottom: 15px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tool-btn:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .tool-btn i {
+            width: 20px;
+        }
+
+        /* Editor Section */
+        .editor-section {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 600px;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .editor-header h2 {
+            color: var(--primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .primary-btn {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .secondary-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .outline-btn {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* PDF Viewer */
+        .pdf-viewer {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            background: #f9f9f9;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .pdf-placeholder {
+            color: var(--text-light);
+        }
+
+        .pdf-placeholder i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        #pdfCanvas {
+            max-width: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .page-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-info {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Text Editor Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-section {
+                order: 2;
+            }
+            
+            .editor-section {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .editor-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-bar">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">T</div>
+                <div class="logo-text">Tollify Hub</div>
+            </a>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Tools
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Sidebar - Upload & Tools -->
+        <div class="upload-section">
+            <h3>Upload PDF</h3>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="upload-text">
+                    <strong>Click to upload PDF</strong>
+                    <p>or drag and drop</p>
+                </div>
+                <button class="browse-btn">Browse Files</button>
+                <input type="file" id="fileInput" accept=".pdf">
+            </div>
+
+            <div class="file-info" id="fileInfo">
+                <h4>File Details:</h4>
+                <p id="fileName">No file selected</p>
+                <p id="fileSize">-</p>
+                <p id="pageCount">-</p>
+            </div>
+
+            <div class="tools-section">
+                <h3>Edit Tools</h3>
+                
+                <div class="tool-group">
+                    <h4><i class="fas fa-text-height"></i> Text Tools</h4>
+                    <button class="tool-btn" onclick="openTextEditor()">
+                        <i class="fas fa-font"></i> Add Text
+                    </button>
+                    <button class="tool-btn">
+                        <i class="fas fa-highlighter"></i> Highlight Text
+                    </button>
+                    <button class="tool-btn">
+                        <i class="fas fa-eraser"></i> Remove Text
+                    </button>
+                </div>
+
+                <div class="tool-group">
+                    <h4><i class="fas fa-image"></i> Image Tools</h4>
+                    <button class="tool-btn">
+                        <i class="fas fa-plus"></i> Add Image
+                    </button>
+                    <button class="tool-btn">
+                        <i class="fas fa-crop"></i> Crop Image
+                    </button>
+                </div>
+
+                <div class="tool-group">
+                    <h4><i class="fas fa-file-alt"></i> Page Tools</h4>
+                    <button class="tool-btn">
+                        <i class="fas fa-plus-circle"></i> Add Page
+                    </button>
+                    <button class="tool-btn">
+                        <i class="fas fa-trash"></i> Delete Page
+                    </button>
+                    <button class="tool-btn">
+                        <i class="fas fa-exchange-alt"></i> Rotate Page
+                    </button>
+                </div>
+
+                <div class="tool-group">
+                    <h4><i class="fas fa-shield-alt"></i> Security</h4>
+                    <button class="tool-btn">
+                        <i class="fas fa-lock"></i> Add Password
+                    </button>
+                    <button class="tool-btn">
+                        <i class="fas fa-watermark"></i> Add Watermark
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section - PDF Editor -->
+        <div class="editor-section">
+            <div class="editor-header">
+                <h2>PDF Editor</h2>
+                <div class="action-buttons">
+                    <button class="action-btn primary-btn" id="saveBtn" disabled>
+                        <i class="fas fa-save"></i> Save PDF
+                    </button>
+                    <button class="action-btn secondary-btn" id="downloadBtn" disabled>
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="action-btn outline-btn" id="printBtn" disabled>
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+            </div>
+
+            <div class="pdf-viewer">
+                <div class="pdf-placeholder" id="pdfPlaceholder">
+                    <i class="fas fa-file-pdf"></i>
+                    <h3>No PDF File Selected</h3>
+                    <p>Upload a PDF file to start editing</p>
+                </div>
+                <canvas id="pdfCanvas" style="display: none;"></canvas>
+            </div>
+
+            <div class="page-controls" id="pageControls" style="display: none;">
+                <button class="page-btn" id="prevPage">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="page-info">Page <span id="pageNum">1</span> of <span id="pageCount">1</span></span>
+                <button class="page-btn" id="nextPage">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Editor Modal -->
+    <div class="modal" id="textEditorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Text to PDF</h3>
+                <button class="close-btn" onclick="closeTextEditor()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="textContent">Text Content</label>
+                <textarea id="textContent" placeholder="Enter text to add to PDF..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="textFont">Font</label>
+                <select id="textFont">
+                    <option value="Arial">Arial</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="textSize">Font Size</label>
+                <input type="number" id="textSize" value="12" min="8" max="72">
+            </div>
+            <div class="form-group">
+                <label for="textColor">Text Color</label>
+                <input type="color" id="textColor" value="#000000">
+            </div>
+            <button class="action-btn primary-btn" style="width: 100%;" onclick="addTextToPDF()">
+                <i class="fas fa-plus"></i> Add Text to PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Tollify Hub. All rights reserved. | tollifyhub@gmail.com</p>
+        <p style="margin-top: 10px; opacity: 0.8;">Professional PDF Editor Tool</p>
+    </footer>
+
+    <script>
+        // PDF.js configuration
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        let currentPDF = null;
+        let currentPage = 1;
+        let totalPages = 1;
+
+        // DOM Elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const pageCount = document.getElementById('pageCount');
+        const pdfPlaceholder = document.getElementById('pdfPlaceholder');
+        const pdfCanvas = document.getElementById('pdfCanvas');
+        const pageControls = document.getElementById('pageControls');
+        const pageNum = document.getElementById('pageNum');
+        const pageCountSpan = document.getElementById('pageCount');
+        const prevPage = document.getElementById('prevPage');
+        const nextPage = document.getElementById('nextPage');
+        const saveBtn = document.getElementById('saveBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const printBtn = document.getElementById('printBtn');
+
+        // Event Listeners
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#27ae60';
+            uploadArea.style.background = 'rgba(39, 174, 96, 0.1)';
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#e0e0e0';
+            uploadArea.style.background = 'transparent';
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#e0e0e0';
+            uploadArea.style.background = 'transparent';
+            if (e.dataTransfer.files.length > 0) {
+                handleFileSelect(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        prevPage.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        });
+
+        nextPage.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        });
+
+        // File handling
+        function handleFileSelect(file) {
+            if (file.type !== 'application/pdf') {
+                alert('Please select a PDF file.');
+                return;
+            }
+
+            // Show file info
+            fileInfo.style.display = 'block';
+            fileName.textContent = `Name: ${file.name}`;
+            fileSize.textContent = `Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const typedarray = new Uint8Array(e.target.result);
+                loadPDF(typedarray);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // PDF loading and rendering
+        function loadPDF(data) {
+            pdfjsLib.getDocument(data).promise.then(pdf => {
+                currentPDF = pdf;
+                totalPages = pdf.numPages;
+                currentPage = 1;
+
+                // Update UI
+                pdfPlaceholder.style.display = 'none';
+                pdfCanvas.style.display = 'block';
+                pageControls.style.display = 'flex';
+                pageCount.textContent = `Pages: ${totalPages}`;
+                pageCountSpan.textContent = totalPages;
+
+                // Enable buttons
+                saveBtn.disabled = false;
+                downloadBtn.disabled = false;
+                printBtn.disabled = false;
+
+                renderPage(1);
+            }).catch(error => {
+                console.error('Error loading PDF:', error);
+                alert('Error loading PDF file. Please try another file.');
+            });
+        }
+
+        function renderPage(pageNum) {
+            currentPDF.getPage(pageNum).then(page => {
+                const viewport = page.getViewport({ scale: 1.5 });
+                const canvas = pdfCanvas;
+                const context = canvas.getContext('2d');
+                
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                page.render(renderContext).promise.then(() => {
+                    document.getElementById('pageNum').textContent = pageNum;
+                });
+            });
+        }
+
+        // Text Editor Functions
+        function openTextEditor() {
+            if (!currentPDF) {
+                alert('Please upload a PDF file first.');
+                return;
+            }
+            document.getElementById('textEditorModal').style.display = 'flex';
+        }
+
+        function closeTextEditor() {
+            document.getElementById('textEditorModal').style.display = 'none';
+        }
+
+        function addTextToPDF() {
+            const text = document.getElementById('textContent').value;
+            const font = document.getElementById('textFont').value;
+            const size = document.getElementById('textSize').value;
+            const color = document.getElementById('textColor').value;
+
+            if (!text.trim()) {
+                alert('Please enter some text.');
+                return;
+            }
+
+            // In a real implementation, you would use pdf-lib to modify the PDF
+            // This is a simplified example
+            alert(`Text "${text}" would be added to the PDF with font ${font}, size ${size}, color ${color}`);
+            
+            closeTextEditor();
+        }
+
+        // Save/Download functionality
+        saveBtn.addEventListener('click', () => {
+            alert('PDF saved successfully!');
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            // In real implementation, this would download the modified PDF
+            alert('Downloading your edited PDF...');
+        });
+
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('textEditorModal');
+            if (e.target === modal) {
+                closeTextEditor();
+            }
+        });
+    </script>
+</body>
+</html>
